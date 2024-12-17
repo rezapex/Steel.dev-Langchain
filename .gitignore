@@ -50,5 +50,5 @@ htmlcov/
 .pytest_cache/
 
 
-project_docs/  
+.local
 
