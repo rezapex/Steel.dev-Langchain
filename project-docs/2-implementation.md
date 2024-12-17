@@ -1,127 +1,176 @@
+# Steel x LangChain Integration Implementation Plan
 
-# Breaking Down the Steel-LangChain Integration Project
+This document outlines the implementation status and next steps for the Steel-LangChain integration project.
 
+## Current Status
 
-This breakdown organizes the project into actionable steps, referencing the provided documentation and examples.
+### ✅ Completed Work
 
-================================================================================
-**I. Project Setup and Research (Day 1)**
-================================================================================
+#### Core Integration
+1. **SteelWebLoader Implementation**
+   - Two implementations available:
+     - `web_loader.py`: Uses SteelSessionManager for session handling
+     - `web_loader-2.py`: Direct Steel SDK integration
+   - Features implemented:
+     - Multiple content extraction strategies (text, markdown, HTML)
+     - Proxy network support
+     - CAPTCHA solving capability
+     - Comprehensive error handling
+     - Environment variable support
+     - Session management
 
-1. **Set up Development Environment:**
-    - Create a virtual environment.
-    - Install required libraries: `langchain`, `steel-sdk`, `playwright`.
-    - Clone the LangChain repository (for contributing later).
+2. **Session Management**
+   - Implemented `SteelSessionManager` with:
+     - Automated session lifecycle management
+     - Context manager support
+     - Playwright integration
+     - Error handling and cleanup
 
-2. **Deep Dive into LangChain Loaders:**
-    - Study the `browserbase` and `browserless` loaders for implementation patterns.  Pay close attention to:
-        - `BaseLoader` inheritance.
-        - Asynchronous loading (`aloud`).
-        - Handling loader options (e.g., headless mode, viewport).
-    - Examine the `youtube_transcript` loader for handling different data types.
+## Next Steps
 
-3. **Familiarize with Steel SDK:**
-    - Go through the Steel documentation, particularly:
-        - Connecting with Playwright (Python): This is crucial for controlling the browser within Steel.
-        - Intro to Steel: Understand core concepts and session management.
+### 1. Finalize Core Integration (1 Day)
 
-4. **Plan the Shopping Assistant Example:**
-    - Decide on specific e-commerce sites for testing.
-    - Define the scope of each tool (Product Search, Price Analysis, Review Analysis).  Consider realistic scenarios and potential challenges.
+- [ ] **Choose Final Implementation**
+  - Compare `web_loader.py` and `web_loader-2.py`
+  - Select best approach based on:
+    - Code maintainability
+    - Error handling robustness
+    - Session management efficiency
+  - Consolidate into single implementation
 
-================================================================================
-**II. Core Loader Implementation (Day 2)**
-================================================================================
+- [ ] **Add Tests**
+  - Unit tests for loader functionality
+  - Integration tests with Steel service
+  - Error handling tests
+  - Session management tests
 
-1. **Implement `SteelLoader`:**
-    - [x] Create a new file (e.g., `steel_loader.py`) within the LangChain `document_loaders` directory.
-    - [ ] Inherit from `langchain.document_loaders.BaseLoader`.
-    - [ ] Implement `__init__` to initialize Steel connection parameters (API key, session ID, etc.).  Consider both self-hosted and Steel Cloud options.
-    - [ ] Implement `aloud` to:
-        - [ ] Establish a connection to Steel using the SDK.
-        - [ ] Use Playwright through the Steel connection to navigate to the URL.
-        - [ ] Extract the page content.
-        - [ ] Handle potential errors (timeouts, network issues).
-        - [ ] Close the Steel session.
-    - [ ] Add support for common browser options (headless, viewport, wait_until).
+- [ ] **Prepare PR**
+  - Follow Langchain contribution guidelines
+  - Update inline documentation
+  - Add type hints and docstrings
+  - Ensure code quality standards
 
-2. **Initial Testing:**
-    - Write unit tests to verify `SteelLoader` functionality.
-    - Test with different websites and options.
+### 2. Example Implementation (2 Days)
 
-**III. Shopping Assistant Tools (Day 3)**
+- [ ] **Design Example Use Case**
+  - Choose practical scenario demonstrating Steel's capabilities
+  - Define scope and requirements
+  - Plan implementation approach
 
-1. **Implement `ProductSearchTool`:**
-    - Create a new file for the tools (e.g., `shopping_tools.py`).
-    - Inherit from `langchain.tools.BaseTool`.
-    - Implement `_run` to:
-        - Use `SteelLoader` to load the search results page.
-        - Extract product information (title, price, URL, etc.) using Playwright selectors.
-        - Format the results into a structured output (e.g., a list of dictionaries).
-        - Handle pagination if necessary.
+- [ ] **Implement Custom Tools**
+  - Create tools using SteelWebLoader
+  - Implement error handling
+  - Add retry logic
+  - Document usage patterns
 
-2. **Implement `PriceAnalysisTool` and `ReviewAnalysisTool`:**
-    - Follow a similar pattern as `ProductSearchTool`, adapting the logic for price extraction and review analysis.
+- [ ] **Create Agent Integration**
+  - Set up LangChain agent
+  - Configure tools and prompts
+  - Implement conversation flows
+  - Add error recovery
 
-3. **Tool Testing:**
-    - Write unit tests for each tool.
-    - Test with various product URLs and search queries.
+### 3. Documentation (1 Day)
 
-**IV. Agent Integration and Testing (Day 4)**
+- [ ] **Tutorial Documentation**
+  - Installation guide
+  - Basic usage examples
+  - Advanced configurations
+  - Error handling patterns
+  - Best practices
 
-1. **Integrate Tools with LangChain Agent:**
-    - Use `initialize_agent` with the created tools, a suitable LLM (e.g., `ChatOpenAI`), and an appropriate agent type.
+- [ ] **Repository Documentation**
+  - Clear README
+  - Architecture overview
+  - API reference
+  - Example code
+  - Contributing guidelines
 
-2. **Develop Conversation Flows:**
-    - Define specific user queries and expected agent responses.
-    - Test the agent with these queries.
+### 4. Demo Creation (1 Day)
 
-3. **Implement Error Handling and Retries:**
-    - Add robust error handling within the tools and agent.
-    - Implement retry logic for transient errors (e.g., network issues).
+- [ ] **Plan Demo**
+  - Define demo scenario
+  - Create script
+  - Prepare environment
 
-4. **Integration Testing:**
-    - Conduct end-to-end tests to verify agent behavior in different scenarios.
-    - Test error handling and retry mechanisms.
+- [ ] **Record Demo**
+  - Show core functionality
+  - Demonstrate error handling
+  - Highlight key features
+  - Create supporting materials
 
-**V. Documentation and Demo (Day 5)**
+## Implementation Guidelines
 
-1. **Write the Tutorial:**
-    - Create a step-by-step guide for building the shopping assistant.
-    - Include clear code examples and explanations.
-    - Add testing instructions.
+### Code Quality
+- Follow PEP 8 style guide
+- Add comprehensive docstrings
+- Include type hints
+- Write clear error messages
+- Add logging at appropriate levels
 
-2. **Update README:**
-    - Add installation instructions.
-    - Write a quick start guide.
-    - Provide an architecture overview.
-    - Include usage examples.
+### Testing
+- Unit tests for core functionality
+- Integration tests for Steel interaction
+- Error case coverage
+- Session management verification
 
-3. **Create Demo Video/GIF:**
-    - Record a terminal session showcasing the shopping assistant in action.
-    - Highlight key features and functionalities.
+### Documentation
+- Clear, concise explanations
+- Practical examples
+- Troubleshooting guides
+- API reference
 
-4. **Prepare for Project Review:**
-    - Organize your code and documentation.
-    - Prepare a brief presentation to walk through the implementation.
+## Reference Implementation
 
+```python
+from langchain_community.document_loaders import SteelWebLoader
 
-This breakdown provides a structured approach to tackling the project within the given timeframe. Remember to prioritize the core functionality and documentation, focusing on delivering a working integration and a clear understanding of how to use it. The shopping assistant example serves as a demonstration of the integration's capabilities.  Adjust the scope and focus based on your progress and the feedback you receive. Remember to communicate regularly with the Steel team.
+# Basic usage
+loader = SteelWebLoader(
+    "https://example.com",
+    steel_api_key="your-api-key"
+)
+documents = loader.load()
 
+# Advanced configuration
+loader = SteelWebLoader(
+    "https://example.com",
+    steel_api_key="your-api-key",
+    extract_strategy="html",
+    timeout=60000,
+    use_proxy=True,
+    solve_captcha=True
+)
+documents = loader.load()
+```
 
----
+## Timeline
 
-Reference: 
+1. **Day 1**: Finalize core integration
+   - Choose implementation
+   - Add tests
+   - Prepare PR
 
-## Langchain
-[Langchain Document Loader PR repo](https://github.com/langchain-ai/langchain/tree/fa0618883493cf6a1447a73b66cd10c0f028e09b/libs/community/langchain_community/document_loaders)
-[Langchain Python Playwright Agent](https://python.langchain.com/docs/integrations/tools/playwright/#use-within-an-agent)
-[Langchain youtube_transcript](https://python.langchain.com/docs/integrations/document_loaders/youtube_transcript)
-[Langchain BrowserbaseLoader](https://python.langchain.com/api_reference/community/document_loaders/langchain_community.document_loaders.browserbase.BrowserbaseLoader.html#langchain_community.document_loaders.browserbase.BrowserbaseLoader)
+2. **Days 2-3**: Example implementation
+   - Design use case
+   - Implement tools
+   - Create agent integration
 
-## Steel
-[Steel Get started](https://docs.steel.dev/overview/intro-to-steel)
-[Steel SDK](https://pypi.org/project/steel-sdk/)
-[Steel Python Playwright](https://docs.steel.dev/overview/guides/connect-with-playwright-python)
+3. **Day 4**: Documentation
+   - Write tutorial
+   - Update repository docs
+   - Add inline documentation
 
-[Personal Fork](https://github.com/rezapex/langchain/tree/add_steel_loader)
+4. **Day 5**: Demo and review
+   - Create demo
+   - Record video
+   - Final testing
+   - Prepare for review
+
+## Success Metrics
+
+- Core integration works reliably
+- Example implementation demonstrates practical use
+- Documentation is clear and complete
+- Demo effectively showcases capabilities
+- Code meets quality standards
+- Tests provide good coverage
