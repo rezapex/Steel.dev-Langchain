@@ -1,0 +1,8 @@
+playwright==1.48.0
+python-dotenv==1.0.0
+steel-sdk>=0.1.0b3
+langchain-core
+langchain-community
+# Optional: for full RAG example
+# langchain-openai
+# faiss-cpu
