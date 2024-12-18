@@ -14,33 +14,56 @@ A LangChain integration for Steel.dev that enables AI agents to leverage Steel's
 - 🛡️ Comprehensive error handling
 - 🎯 LangChain agents for automated web tasks
 
-## Installation
+## Quick Installation
 
 ```bash
 # Clone the repository
 git clone https://github.com/rezapex/steel-langchain.git
 cd steel-langchain
 
-# Create virtual environment
-python -m venv venv
+# Run the installation script
+./install.sh
+```
+
+The install script will:
+1. Create a virtual environment
+2. Install all required dependencies
+3. Optionally install development dependencies
+4. Set up Playwright browsers
+
+## Environment Setup
+
+Before running any agents, you need to set up your environment variables. Create a `.env` file in the root directory with the following:
+
+```env
+STEEL_API_KEY=your_steel_api_key_here  # Get from steel.dev
+OPENAI_API_KEY=your_openai_api_key_here  # Required for LangChain agents
+```
+
+Alternatively, you can set these environment variables in your shell:
+
+```bash
+# For macOS/Linux
+export STEEL_API_KEY=your_steel_api_key_here
+export OPENAI_API_KEY=your_openai_api_key_here
+
+# For Windows PowerShell
+$env:STEEL_API_KEY="your_steel_api_key_here"
+$env:OPENAI_API_KEY="your_openai_api_key_here"
+```
+
+## Running the Shopping Agent
+
+After setting up your environment variables:
+
+```bash
+# Activate the virtual environment if not already activated
 source venv/bin/activate  # Unix
 # or
 .\venv\Scripts\activate  # Windows
 
-# Install dependencies
-pip install -r requirements.txt
-
-# Install Playwright browsers
-playwright install
-```
-
-## Environment Setup
-
-Create a `.env` file with your API keys:
-
-```env
-STEEL_API_KEY=your_steel_api_key_here
-OPENAI_API_KEY=your_openai_api_key_here  # Required for LangChain agents
+# Run the shopping agent
+python agents/shopping_agent.py
 ```
 
 ## Usage
@@ -174,12 +197,10 @@ git clone https://github.com/yourusername/steel-langchain.git
 cd steel-langchain
 ```
 
-2. Create a virtual environment and install dependencies:
+2. Run the install script with development dependencies:
 ```bash
-python -m venv venv
-source venv/bin/activate  # Unix
-pip install -r requirements.txt
-playwright install
+./install.sh
+# Select 'y' when prompted for development dependencies
 ```
 
 3. Run tests:
@@ -206,6 +227,7 @@ steel-langchain/
 │   └── test_loader.py
 ├── requirements.txt
 ├── setup.py
+├── install.sh
 ├── README.md
 └── .env
 ```

@@ -30,6 +30,7 @@ setup(
     install_requires=[
         "langchain-core",
         "langchain-community",
+        "langchain-openai",
         "steel-sdk>=0.1.0b3",
         "playwright>=1.48.0",
         "python-dotenv>=1.0.0",
