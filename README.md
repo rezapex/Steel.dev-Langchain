@@ -18,7 +18,7 @@ A LangChain integration for Steel.dev that enables AI agents to leverage Steel's
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/steel-langchain.git
+git clone https://github.com/rezapex/steel-langchain.git
 cd steel-langchain
 
 # Create virtual environment
