@@ -29,6 +29,12 @@ class ShoppingTools:
         except RuntimeError:
             self._loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self._loop)
+        self.loader = SteelWebLoader(
+            extract_strategy="text",
+            solve_captcha=True,
+            use_proxy=False,
+            timeout=60000
+        )
     
     def _normalize_url(self, url: str) -> str:
         """Normalize URL to ensure it works with Steel."""
@@ -197,6 +203,40 @@ class ShoppingTools:
         """Synchronous wrapper for filter_results."""
         return self._loop.run_until_complete(self.filter_results(input_str))
 
+    async def advanced_search(self, query: str) -> str:
+        """Implement advanced search following existing patterns"""
+        url = self._build_amazon_url(query)
+        print(f"\n{BLUE}🔗 Advanced Searching URL:{RESET} {url}")
+        
+        loader = SteelWebLoader(
+            urls=[url],
+            extract_strategy="text",
+            solve_captcha=True,
+            timeout=60000
+        )
+        
+        try:
+            docs = await loader.load()
+            if not docs:
+                return "Failed to load search results"
+                
+            # Extract and format product information
+            products = self._extract_product_info(docs[0].page_content)
+            
+            # Format results
+            result = "Found the following products:\n\n"
+            for i, product in enumerate(products, 1):
+                result += f"{i}. {product['title']}\n"
+                result += f"   Price: {product['price']}\n"
+                result += f"   Rating: {product['rating']}\n"
+                result += f"   Reviews: {product['reviews']}\n"
+                result += f"   Link: {product['link']}\n\n"
+            
+            return result
+            
+        except Exception as e:
+            return f"Error loading search results: {str(e)}"
+
 def create_shopping_tools() -> List[Tool]:
     """Create tools for shopping interaction using Steel sessions."""
     tools = ShoppingTools()
@@ -218,6 +258,14 @@ def create_shopping_tools() -> List[Tool]:
                 "Input should be a URL and filter criteria separated by comma. "
                 "Filter criteria can be 'price:low-to-high', 'price:high-to-low', or 'rating'. "
                 "Example: 'https://www.amazon.com/s?k=laptop, price:low-to-high'"
+            )
+        ),
+        Tool(
+            name="AdvancedSearch",
+            func=tools.advanced_search,
+            description=(
+                "Perform an advanced search for a product on Amazon. "
+                "Input should be a search query (e.g. 'laptop')."
             )
         )
     ]
