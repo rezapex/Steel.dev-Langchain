@@ -12,6 +12,7 @@ A LangChain integration for Steel.dev that enables AI agents to leverage Steel's
 - 🔍 Session viewer for debugging
 - ⚡ Async support with proper resource management
 - 🛡️ Comprehensive error handling
+- 🎯 LangChain agents for automated web tasks
 
 ## Installation
 
@@ -35,15 +36,16 @@ playwright install
 
 ## Environment Setup
 
-Create a `.env` file with your Steel API key:
+Create a `.env` file with your API keys:
 
 ```env
 STEEL_API_KEY=your_steel_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here  # Required for LangChain agents
 ```
 
 ## Usage
 
-### Basic Usage
+### Basic Web Loading
 
 ```python
 from steel_langchain import SteelWebLoader
@@ -60,6 +62,23 @@ documents = loader.load()
 # Access content
 print(documents[0].page_content)
 print(documents[0].metadata)  # Includes session viewer URL
+```
+
+### Web Agent
+
+```python
+from agents.web_agent import create_web_agent
+
+# Create web browsing agent
+agent = create_web_agent()
+
+# Run a web task
+result = agent.invoke({
+    "input": "What is the main content of https://example.com?"
+})
+
+# Get formatted output with thoughts and actions
+print(result['output'])
 ```
 
 ### Multiple Pages
@@ -95,35 +114,57 @@ session_info = loader.get_session_info()
 print(f"Debug at: {session_info['viewer_url']}")
 ```
 
+## Components
+
+### Core Library (`src/steel_langchain/`)
+- WebLoader implementation
+- Session management
+- Resource handling
+- See [Core Library README](src/steel_langchain/README.md)
+
+### LangChain Agents (`agents/`)
+- Web browsing agent
+- Content extraction
+- Formatted output
+- See [Agents README](agents/README.md)
+
+### Tests (`tests/`)
+- Unit tests
+- Integration tests
+- Test utilities
+- See [Tests README](tests/README.md)
+
 ## Features
 
 ### Session Management
-
 - Persistent sessions for efficient browsing
 - Session reuse capabilities
 - Automatic cleanup on interruption
 - Live session viewer for debugging
 
 ### Content Extraction
-
 - Text extraction for clean content
 - HTML extraction for structure analysis
 - Markdown extraction for formatting
 - Configurable timeouts and retries
 
 ### Steel Integration
-
 - Proxy network support for access
 - Automated CAPTCHA solving
 - Browser automation via Playwright
 - Session viewer integration
 
 ### Resource Management
-
 - Async context managers
 - Proper event loop handling
 - Signal handling for cleanup
 - Memory-efficient lazy loading
+
+### LangChain Integration
+- Document loader interface
+- Agent framework integration
+- Tool implementations
+- Chain components
 
 ## Development
 
@@ -143,27 +184,26 @@ playwright install
 
 3. Run tests:
 ```bash
-python tests/test_loader.py
-```
-
-4. Run demo:
-```bash
-python demo.py
+python -m unittest discover tests
 ```
 
 ## Project Structure
 
 ```
 steel-langchain/
+├── agents/
+│   ├── README.md
+│   └── web_agent.py
 ├── src/
 │   └── steel_langchain/
+│       ├── README.md
 │       ├── __init__.py
+│       ├── cleanup_sessions.py
+│       ├── session_manager.py
 │       └── web_loader.py
 ├── tests/
+│   ├── README.md
 │   └── test_loader.py
-├── project-docs/
-│   ├── 1-project-overview.md
-│   └── 2-implementation.md
 ├── requirements.txt
 ├── setup.py
 ├── README.md
