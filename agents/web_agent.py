@@ -456,8 +456,8 @@ def main():
         return
     
     # Example task
-    task = "What is the HTML structure of https://example.com?"
-    # task = "What is the main content of https://example.com?"
+    # task = "What is the HTML structure of https://example.com?"
+    task = "What is the main content of https://example.com?"
     print(f"\n{BOLD}{'='*50}{RESET}")
     print(f"{YELLOW}🎯 Task:{RESET} {task}")
     print(f"{BOLD}{'='*50}{RESET}\n")
