@@ -66,6 +66,18 @@ source venv/bin/activate  # Unix
 python agents/shopping_agent.py
 ```
 
+## Setting up the Python Notebook in Google Colab
+
+You can set up and run the Steel LangChain example notebook in Google Colab with one click. This notebook includes examples for testing the loader and running web and shopping agents.
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rezapex/steel-langchain/blob/main/notebooks/steel_langchain_example.ipynb)
+
+### Instructions for Running the Notebook
+
+1. Click the "Open In Colab" button above to open the notebook in Google Colab.
+2. Follow the instructions in the notebook to install the required packages and set up the environment variables.
+3. Run the cells to test the loader and execute the agent examples.
+
 ## Usage
 
 ### Basic Web Loading
